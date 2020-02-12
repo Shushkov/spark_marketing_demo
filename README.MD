@@ -58,7 +58,10 @@ channelIid: String,    // derived from app_open#attributes#channel_id
    - Channels engagement performance: What is the most popular (i.e. Top) channel that drives the highest amount of unique sessions (engagements)  with the App in each campaign?
 
 #### Build
-   ` sbt package`
+From project directory run following command:
+
+`sbt package`
 #### Run Demo
 From project directory run following command:
-`spark-submit --class "ru.saertis.marketing.demo.processing.BatchProcessing" --master "local[*]" target/scala-2.11/marketing_analytics_demo_2.11-0.1.jar`
+
+```spark-submit --class "ru.saertis.marketing.demo.processing.BatchProcessing" --master "local[*]" target/scala-2.11/marketing_analytics_demo_2.11-0.1.jar```
