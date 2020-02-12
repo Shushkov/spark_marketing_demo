@@ -1,5 +1,5 @@
 
-name := "marketing_analytics_demo"
+name := "spark_marketing_demo"
 
 version := "0.1"
 
