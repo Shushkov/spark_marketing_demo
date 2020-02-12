@@ -57,8 +57,8 @@ channelIid: String,    // derived from app_open#attributes#channel_id
    - Top Campaigns:  What are the Top 10 marketing campaigns that bring the biggest revenue (based on billingCost of confirmed purchases)?
    - Channels engagement performance: What is the most popular (i.e. Top) channel that drives the highest amount of unique sessions (engagements)  with the App in each campaign?
 
-####Build
-    sbt package
+#### Build
+   ` sbt package`
 #### Run Demo
 From project directory run following command:
 `spark-submit --class "ru.saertis.marketing.demo.processing.BatchProcessing" --master "local[*]" target/scala-2.11/marketing_analytics_demo_2.11-0.1.jar`
