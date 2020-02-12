@@ -48,13 +48,17 @@ package object domain {
 
   val campaignStatisticSQL: String =
     """
-      |SELECT
+      |SELECT distinct
       | campaignId,
+      | first(channelId) over (partition by campaignId order by count desc) as channelId,
+      | max(count) over (partition by campaignId order by count desc) as max
+      | from (select campaignId,
       | channelId,
       | count(sessionId) as count
       |FROM mobileClickStreamSQL
       |GROUP BY campaignId, channelId
-      |ORDER BY count desc
+      |ORDER BY count desc)
+      |order by max desc
       |""".stripMargin
 }
 

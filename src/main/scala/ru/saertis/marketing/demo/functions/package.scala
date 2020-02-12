@@ -4,7 +4,7 @@ import java.util.UUID
 
 import ru.saertis.marketing.demo.domain._
 import org.apache.spark.sql.expressions.{UserDefinedFunction, Window}
-import org.apache.spark.sql.functions.{asc, collect_list, concat_ws, count, desc, sum, udf}
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods.parse
@@ -98,5 +98,7 @@ package object functions {
     frame.groupBy("campaignId","channelId")
       .agg(count("sessionId") as "count")
       .orderBy(desc("count"))
+      .groupBy("campaignId").agg(first("channelId") as "channelId",max("count") as "max")
+      .orderBy(desc("max"))
   }
 }
