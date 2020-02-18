@@ -10,6 +10,8 @@ object BatchProcessing extends App {
     
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
     
+    @transient lazy val log = org.apache.log4j.LogManager.getLogger("BatchProcessing")
+    
     implicit val spark: SparkSession = SparkSession.builder
         .master("local[3]")
         .appName("Batch processing")
@@ -20,7 +22,9 @@ object BatchProcessing extends App {
     
     spark.udf.register("addUUID", addUUID)
     
-    val mobileCsv = readClickStreamCSV(spark, "data/mobile-app-clickstream.csv").cache()
+    val clickStreamPath = Settings.clickStreamCsvPath
+    
+    val mobileCsv = readClickStreamCSV(spark, clickStreamPath).cache()
     
     mobileCsv.createOrReplaceTempView("mobileCSV")
     
@@ -38,7 +42,9 @@ object BatchProcessing extends App {
     
     mobileClickStreamSQLDS.show()
     
-    val purchases = readPurchaseCSV(spark, "data/purchases_sample.csv").cache()
+    val purchasePath = Settings.purchaseCsvPath
+    
+    val purchases = readPurchaseCSV(spark, purchasePath).cache()
     
     
     purchases.show()
@@ -51,29 +57,26 @@ object BatchProcessing extends App {
         .select("purchaseId","purchaseTime","billingCost","isConfirmed","sessionId","campaignId","channelId").cache()
     
     
-    println("Purchases Attribution Projection:")
+    log.info("Purchases Attribution Projection:")
     purchaseStatistic.show()
     
     val projectionSQL = spark.sql(purchaseProjection).cache()
     projectionSQL.show()
     projectionSQL.createOrReplaceTempView("purchasesView")
     
-    println("Top Campaigns declarative:")
+    log.info("Top Campaigns declarative:")
     topCampaign(purchaseStatistic)
         .show(10)
     
-    println("Top Campaigns over SQL:")
+    log.info("Top Campaigns over SQL:")
     spark.sql(purchasesStatisticSQL).show(10)
     
-    println("Channels engagement performance declarative:")
+    log.info("Channels engagement performance declarative:")
     performanceCampaign(mobileClickStream)
         .show()
     
-    println("Channels engagement performance over SQL:")
+    log.info("Channels engagement performance over SQL:")
     spark.sql(campaignStatisticSQL).show()
-    
-    
-    
     
     spark.close()
     

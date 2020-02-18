@@ -1,8 +1,18 @@
 package ru.saertis.marketing.demo
 
 import java.sql.Timestamp
+import com.typesafe.config.ConfigFactory
 
 package object domain {
+    
+    object Settings {
+        private val config = ConfigFactory.load();
+        
+        private val properties = config.getConfig("clickStream")
+        
+        lazy val clickStreamCsvPath: String = properties.getString("clickstream_path")
+        lazy val purchaseCsvPath: String = properties.getString("purchase_path")
+    }
     
     case class ClickStream(userId: String, eventId: String, eventTime: Timestamp, eventType: String, attributes: Option[Map[String, String]])
     

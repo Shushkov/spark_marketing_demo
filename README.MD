@@ -32,7 +32,7 @@ isConfirmed: Boolean
 ```
 
 ---
-Datasets located in the project's data directory 
+Datasets located in the project's data directory. You can change location of datasets by replacing **clickstream_path** and **purchase_path** properties in application.conf property file/
 ### Task #1:
 
 - Build Purchases Attribution Projection
